@@ -25,8 +25,5 @@ web:
 
 clean:
 	@echo "Cleaning..."
-	del /f main.spec
-	rd /s /q output
-	rd /s /q build
 
 .PHONY: all windows linux web clean
