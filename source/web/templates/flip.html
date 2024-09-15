@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FLIP Game</title>
+     <style>
+        body {
+            background-color: black;
+            color: lime;
+            font-family: monospace;
+        }
+        pre {
+            white-space: pre-wrap; /* Preserve line breaks */
+        }
+    </style>
+</head>
+<body>
+    <h1>FLIP</h1>
+    <p>CREATIVE COMPUTING</p>
+    <p>MORRISTOWN NEW JERSEY</p>
+    {% if not game_started %}
+        <p>EXPLANATION (Y OR N)?</p>
+        <form method="post">
+            <input type="text" name="explanation"> </input>
+        </form>
+    {% endif %}
+    {% if explanation and not game_started %}
+        <p>ON EACH TURN, YOU GUESS YES <'Y'> OR NO <'N'>.</p>
+        <p>ONLY ONE IS CORRECT, AND THE PROGRAM HAS DECIDED</p>
+        <p>WHICH ONE, BEFORE YOU MAKE YOUR GUESS. AT FIRST</p>
+        <p>YOUR ODDS ARE 50%, PURE CHANCE. BUT LATER THE</p>
+        <p>PROGRAM WILL TRY TO TAKE ADVANTAGE OF PATTERNS</p>
+        <p>IN YOUR GUESSING.</p>
+        <p>GAME ENDS AFTER {{ turns }} TURNS; A SCORE OF {{ score_target }} OR MORE</p>
+        <p>IS GOOD. PROGRAM TELLS WHEN YOU WIN A TURN,</p>
+        <p>BY TYPING AN ASTERISK ('*') AS THE FIRST</p>
+        <p>CHARACTER OF THE FOLLOWING LINE.</p>
+        <p>BEGIN.</p>
+        <form method="post">
+            <input type="text" name="begin"> </input>
+        </form>
+    {% endif %}
+    {% if not game_over and game_started %}
+        <p>Turns left: {{ turns }}</p>
+        <p>{{ result }}</p>
+        <form method="post">
+            <input type="text" name="guess"> </input>
+        </form>
+    {% endif %}
+    {% if game_over %}
+        <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>
