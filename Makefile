@@ -35,5 +35,6 @@ web:
 
 clean:
 	@echo "Cleaning..."
+	python clear.py
 
-.PHONY: all windows linux web clean
+.PHONY: all windows linux web exe clean
