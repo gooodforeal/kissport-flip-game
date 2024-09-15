@@ -9,7 +9,7 @@ all: windows linux web
 
 windows:
 	@echo "Building for Windows..."
-	$(PYINSTALLER) $(WINDOWS_OPTIONS) $(SOURCE) --distpath ./dist/windows
+	$(PYINSTALLER) $(WINDOWS_OPTIONS) $(SOURCE) --distpath ./output/windows
 
 linux:
 	@echo "Building for Linux..."
