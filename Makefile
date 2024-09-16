@@ -5,10 +5,11 @@ SOURCE_WINDOWS=./source/windows/main.py
 SOURCE_LINUX=./source/linux/main.py
 OUTPUT_WINDOWS=./output/exe
 OUTPUT_LINUX=./output/linux
-WINDOWS_OPTIONS = --onefile --console
-LINUX_OPTIONS = --onefile --console
+WINDOWS_OPTIONS=--onefile --console
+LINUX_OPTIONS=--onefile --console
+CLEANING_FILE=clear.py
 
-all: install exe windows linux web
+all: install exe windows linux web netbsd
 
 install:
 	pip install -r requirements.txt
@@ -31,10 +32,16 @@ linux:
 web:
 	@echo "Building for web..."
 	pip install flask
+	mkdir output\web\templates
+	copy source\web\main.py output\web
+	copy source\web\templates\flip.html output\web\templates
+	python output/web/main.py
 
+netbsd:
+	@echo "Building for NetBSD"
 
 clean:
 	@echo "Cleaning..."
-	python clear.py
+	python $(CLEANING_FILE)
 
-.PHONY: all windows linux web exe clean
+.PHONY: all windows linux web exe netbsd clean
