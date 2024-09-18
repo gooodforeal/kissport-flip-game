@@ -23,7 +23,6 @@ if __name__ == "__main__":
         delete_files_in_folder("output/" + folder)
     try:
         os.remove("main.spec")
-        shutil.rmtree("build")
     except FileNotFoundError:
         pass
     print("Done!")
