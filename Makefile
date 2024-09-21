@@ -11,6 +11,8 @@ BSD_OUTPUT=`pwd`/output/netbsd
 WINDOWS_OPTIONS=--onefile --console
 LINUX_OPTIONS=--onefile --console
 CLEANING_FILE=clear.py
+BSD_PRE_PRE_FLAGS=LD_LIBRARY_PATH=/usr/pkg/include/python3.12/:/usr/pkg/lib/
+BSD_PRE_FLAGS=-Os -I/usr/pkg/include/python3.12 -I/usr/pkg/include/python3.12 -L/usr/pkg/lib  -lintl -lpthread -lcrypt -lutil -lm
 
 all: windows linux web netbsd
 
@@ -25,8 +27,10 @@ web:
 	pip install flask
 	mkdir output\web\templates
 	copy source\web\main.py output\web
+	copy source\web\app.py output\web
 	copy source\web\templates\flip.html output\web\templates
-	python output/web/main.py
+	copy source\web\templates\index.html output\web\templates
+	python output/web/app.py
 
 linux:
 	@echo
@@ -41,14 +45,23 @@ linux:
 netbsd:
 	@echo "Building for NetBSD..."
 	@echo
-	pkgin -y install python312
+	@printf "Installing python, pip, cython..."
+	@pkgin -y install python312 py312-pip
+	@pip3.12 -q install cython
+	@printf "Done\n"
 	@cp -v $(BSD_SOURCE) $(BSD_OUTPUT)
+	@echo "Building C++ file..."
+	@$(PYTHON_BSD_LIN) -m cython $(BSD_OUTPUT)/$(FILE_NAME) --embed
+	@printf "Done\n"
+	@printf "Compiling C++ file..."
+	@ $(BSD_PRE_PRE_FLAGS) gcc $(BSD_PRE_FLAGS) $(BSD_OUTPUT)/main.c -o $(BSD_OUTPUT)/main -lpython3.12
+	@printf "Done\n"
 	@echo
-	@echo "Starting The Game"
+	@echo "Built file located in $(BSD_OUTPUT)"
 	@echo
-	$(PYTHON_BSD_LIN) $(BSD_OUTPUT)/main.py
+
 clean:
 	@echo "Cleaning..."
 	python $(CLEANING_FILE)
 
-.PHONY: all windows linux web exe netbsd clean
+.PHONY: all windows linux web netbsd clean

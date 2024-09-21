@@ -28,9 +28,13 @@ def flip(print, input, rnd=True):
         print("BY TYPING AN ASTERISK ('*') AS THE FIRST")
         print("CHARACTER OF THE FOLLOWING LINE.")
         print("\n")
-    print("BEGIN.")
-    for i in range(4):
-        if random.random() < 0.5:
+    print("\n\nBEGIN.")
+    if rnd:
+        for i in range(4):
+            if random.random() < 0.5:
+                responses[i] = 1
+    else:
+        for i in range(4):
             responses[i] = 1
     print(" ", end="")
     while turns > 0:
@@ -65,7 +69,7 @@ def flip(print, input, rnd=True):
     print(f"\nEND OF GAME.\nYOU GOT {correct} OUT OF {score} CORRECT.\n\n")
     play_again = input("PLAY AGAIN (Y OR N)? ")
     if play_again.upper() == "Y":
-        flip()
+        flip(print, input)
 
 
 if __name__ == "__main__":

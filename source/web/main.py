@@ -1,86 +1,71 @@
-from flask import Flask, render_template, request
 import random
 
-app = Flask(__name__)
 
-turns = 50
-score_target = int(turns / 2 - 1)
-correct = 0
-probabilities = [0.5] * 16
-responses = [0] * 4
-memory_factor = 0.8
-randomness_factor = 0.3
-explanation = False
-game_started = False
-game_over = False
-result = ""
-begin = False
-
-
-@app.route('/', methods=['GET', 'POST'])
-def flip():
-    global turns
-    global score_target
-    global correct
-    global probabilities
-    global responses
-    global memory_factor
-    global randomness_factor
-    global explanation
-    global game_started
-    global game_over
-    global result
-    global begin
-
-    if request.method == 'POST':
-        if 'explanation' in request.form and request.form['explanation'].upper() == "Y":
-            explanation = True
-        elif 'explanation' in request.form and request.form['explanation'].upper() == "N":
-            explanation = False
-            game_started = True
-        elif "begin" in request.form:
-            game_started = True
-        elif 'guess' in request.form:
-            guess = request.form['guess'].upper()
-            if guess not in ("Y", "N"):
-                result = "ERROR, MUST BE  Y  OR  N  ."
-            else:
-                probability_index = 8 * responses[3] + 4 * responses[2] + 2 * responses[1] + responses[0] + 1
-                estimated_probability = probabilities[probability_index - 1]
-                # Adjust the probability based on randomness and memory
-                adjusted_probability = estimated_probability
-                if adjusted_probability != 0.5:
-                    adjusted_probability = (adjusted_probability * randomness_factor) + (
-                        0 if adjusted_probability < 0.5 else 1) * (1 - randomness_factor)
-                program_answer = 1 if random.random() < adjusted_probability else 0
-                if guess == "Y":
-                    player_answer = 1
-                else:
-                    player_answer = 0
-                if player_answer == program_answer:
-                    correct += 1
-                    result = "*"
-                else:
-                    result = " "
-                responses[0] = responses[2]
-                responses[1] = responses[3]
-                responses[2] = player_answer
-                responses[3] = program_answer
-                probabilities[probability_index - 1] = memory_factor * probabilities[probability_index - 1] + (
-                        1 - memory_factor) * player_answer
-                turns -= 1
-                if turns == 0:
-                    game_over = True
-                    result = f"\nEND OF GAME.\nYOU GOT {correct} OUT OF 50 CORRECT.\n\n"
-
-    return render_template('flip.html',
-                           explanation=explanation,
-                           game_started=game_started,
-                           game_over=game_over,
-                           result=result,
-                           turns=turns,
-                           score_target=score_target)
+def flip(print, input, rnd=True):
+    turns = 50
+    score_target = int(turns / 2 - 1)
+    score = 0
+    correct = 0
+    probabilities = [0.5] * 16
+    responses = [0] * 4
+    memory_factor = 0.8
+    randomness_factor = 0.3
+    print(" " * 25 + "FLIP")
+    print(" " * 18 + "CREATIVE COMPUTING")
+    print(" " * 16 + "MORRISTOWN NEW JERSEY")
+    print("\n\n")
+    explanation = input("EXPLANATION (Y OR N)? ")
+    if explanation.upper() == "Y":
+        print("ON EACH TURN, YOU GUESS YES <'Y'> OR NO <'N'>.")
+        print("ONLY ONE IS CORRECT, AND THE PROGRAM HAS DECIDED")
+        print("WHICH ONE, BEFORE YOU MAKE YOUR GUESS. AT FIRST")
+        print("YOUR ODDS ARE 50%, PURE CHANCE. BUT LATER THE")
+        print("PROGRAM WILL TRY TO TAKE ADVANTAGE OF PATTERNS")
+        print("IN YOUR GUESSING.")
+        print("\n")
+        print(f"GAME ENDS AFTER {turns} TURNS; A SCORE OF {score_target} OR MORE")
+        print("IS GOOD. PROGRAM TELLS WHEN YOU WIN A TURN,")
+        print("BY TYPING AN ASTERISK ('*') AS THE FIRST")
+        print("CHARACTER OF THE FOLLOWING LINE.")
+    print("BEGIN.")
+    for i in range(4):
+        if random.random() < 0.5:
+            responses[i] = 1
+    print(" ")
+    while turns > 0:
+        probability_index = 8 * responses[3] + 4 * responses[2] + 2 * responses[1] + responses[0] + 1
+        estimated_probability = probabilities[probability_index - 1]
+        adjusted_probability = estimated_probability
+        if adjusted_probability != 0.5:
+            adjusted_probability = (adjusted_probability * randomness_factor) + (
+                0 if adjusted_probability < 0.5 else 1) * (1 - randomness_factor)
+        program_answer = 1 if random.random() < adjusted_probability else 0
+        guess = input("? ")
+        while guess.upper() not in ("Y", "N"):
+            print("ERROR, MUST BE  Y  OR  N  .")
+            guess = input(" ")
+        if guess.upper() == "Y":
+            player_answer = 1
+        else:
+            player_answer = 0
+        if player_answer == program_answer:
+            correct += 1
+            print("*")
+        else:
+            print(" ")
+        responses[0] = responses[2]
+        responses[1] = responses[3]
+        responses[2] = player_answer
+        responses[3] = program_answer
+        probabilities[probability_index - 1] = memory_factor * probabilities[probability_index - 1] + (
+                    1 - memory_factor) * player_answer
+        turns -= 1
+        score += 1
+    print(f"\nEND OF GAME.\nYOU GOT {correct} OUT OF {score} CORRECT.\n\n")
+    play_again = input("PLAY AGAIN (Y OR N)? ")
+    if play_again.upper() == "Y":
+        flip(print, input)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    flip(print, input)

@@ -28,45 +28,85 @@ def flip(print, input, rnd=True):
         print("BY TYPING AN ASTERISK ('*') AS THE FIRST")
         print("CHARACTER OF THE FOLLOWING LINE.")
         print("\n")
-    print("BEGIN.")
-    for i in range(4):
-        if random.random() < 0.5:
-            responses[i] = 1
-    print(" ", end="")
-    while turns > 0:
-        probability_index = 8 * responses[3] + 4 * responses[2] + 2 * responses[1] + responses[0] + 1
-        estimated_probability = probabilities[probability_index - 1]
-        adjusted_probability = estimated_probability
-        if adjusted_probability != 0.5:
-            adjusted_probability = (adjusted_probability * randomness_factor) + (
-                0 if adjusted_probability < 0.5 else 1) * (1 - randomness_factor)
-        program_answer = 1 if random.random() < adjusted_probability else 0
-        guess = input("? ")
-        while guess.upper() not in ("Y", "N"):
-            print("ERROR, MUST BE  Y  OR  N  .")
-            guess = input(" ")
-        if guess.upper() == "Y":
-            player_answer = 1
-        else:
-            player_answer = 0
-        if player_answer == program_answer:
-            correct += 1
-            print("*", end="")
-        else:
-            print(" ", end="")
-        responses[0] = responses[2]
-        responses[1] = responses[3]
-        responses[2] = player_answer
-        responses[3] = program_answer
-        probabilities[probability_index - 1] = memory_factor * probabilities[probability_index - 1] + (
+    print("\n\nBEGIN.")
+    if rnd:
+        for i in range(4):
+            if random.random() < 0.5:
+                responses[i] = 1
+        print(" ", end="")
+        while turns > 0:
+            probability_index = 8 * responses[3] + 4 * responses[2] + 2 * responses[1] + responses[0] + 1
+            estimated_probability = probabilities[probability_index - 1]
+            adjusted_probability = estimated_probability
+            if adjusted_probability != 0.5:
+                adjusted_probability = (adjusted_probability * randomness_factor) + (
+                    0 if adjusted_probability < 0.5 else 1) * (1 - randomness_factor)
+            program_answer = 1 if random.random() < adjusted_probability else 0
+            guess = input("? ")
+            while guess.upper() not in ("Y", "N"):
+                print("ERROR, MUST BE  Y  OR  N  .")
+                guess = input(" ")
+            if guess.upper() == "Y":
+                player_answer = 1
+            else:
+                player_answer = 0
+            if player_answer == program_answer:
+                correct += 1
+                print("*", end="")
+            else:
+                print(" ", end="")
+            responses[0] = responses[2]
+            responses[1] = responses[3]
+            responses[2] = player_answer
+            responses[3] = program_answer
+            probabilities[probability_index - 1] = memory_factor * probabilities[probability_index - 1] + (
                     1 - memory_factor) * player_answer
-        turns -= 1
-        score += 1
-    print(f"\nEND OF GAME.\nYOU GOT {correct} OUT OF {score} CORRECT.\n\n")
-    play_again = input("PLAY AGAIN (Y OR N)? ")
-    if play_again.upper() == "Y":
-        flip()
+            turns -= 1
+            score += 1
+        print(f"\nEND OF GAME.\nYOU GOT {correct} OUT OF {score} CORRECT.\n\n")
+        play_again = input("PLAY AGAIN (Y OR N)? ")
+        if play_again.upper() == "Y":
+            flip(print, input)
+    else:
+        psy_rnd = 0.45
+        for i in range(4):
+            if psy_rnd < 0.5:
+                responses[i] = 1
+        print(" ", end="")
+        while turns > 0:
+            probability_index = 8 * responses[3] + 4 * responses[2] + 2 * responses[1] + responses[0] + 1
+            estimated_probability = probabilities[probability_index - 1]
+            adjusted_probability = estimated_probability
+            if adjusted_probability != 0.5:
+                adjusted_probability = (adjusted_probability * randomness_factor) + (
+                    0 if adjusted_probability < 0.5 else 1) * (1 - randomness_factor)
+            program_answer = 1 if psy_rnd < adjusted_probability else 0
+            guess = input("? ")
+            while guess.upper() not in ("Y", "N"):
+                print("ERROR, MUST BE  Y  OR  N  .")
+                guess = input(" ")
+            if guess.upper() == "Y":
+                player_answer = 1
+            else:
+                player_answer = 0
+            if player_answer == program_answer:
+                correct += 1
+                print("*", end="")
+            else:
+                print(" ", end="")
+            responses[0] = responses[2]
+            responses[1] = responses[3]
+            responses[2] = player_answer
+            responses[3] = program_answer
+            probabilities[probability_index - 1] = memory_factor * probabilities[probability_index - 1] + (
+                    1 - memory_factor) * player_answer
+            turns -= 1
+            score += 1
+        print(f"\nEND OF GAME.\nYOU GOT {correct} OUT OF {score} CORRECT.\n\n")
+        play_again = input("PLAY AGAIN (Y OR N)? ")
+        if play_again.upper() == "Y":
+            flip(print, input)
 
 
 if __name__ == "__main__":
-    flip(print, input)
+    flip(print, input, False)
