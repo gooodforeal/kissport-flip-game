@@ -5,22 +5,20 @@ FILE_NAME=main.py
 WINDOWS_SOURCE=.\source\windows\main.py
 LINUX_SOURCE=`pwd`/source/linux/main.py
 BSD_SOURCE=./source/netbsd/main.py
-WINDOWS_OUTPUT=.\output\exe
+WINDOWS_OUTPUT=.\output\windows
 LINUX_OUTPUT=`pwd`/output/linux
 BSD_OUTPUT=`pwd`/output/netbsd
 WINDOWS_OPTIONS=--onefile --console
+LINUX_OPTIONS=--onefile --console
 CLEANING_FILE=clear.py
 
-all: exe windows linux web netbsd
-
-exe:
-	@echo "Building exe..."
-	$(PYINSTALLER) $(WINDOWS_OPTIONS) $(WINDOWS_SOURCE) --distpath $(WINDOWS_OUTPUT)
+all: windows linux web netbsd
 
 windows:
+	pip install -r requirements.txt
 	@echo "Building for Windows..."
-	copy source\windows\main.py output\windows
-	python output/windows/main.py
+	$(PYINSTALLER) $(WINDOWS_OPTIONS) $(WINDOWS_SOURCE) --distpath $(WINDOWS_OUTPUT)
+	$(WINDOWS_OUTPUT)\main.exe
 
 web:
 	@echo "Building for web..."
@@ -35,11 +33,10 @@ linux:
 	@echo "Building for Linux..."
 	@echo
 	apt install -y python3 1>/dev/null
-	@cp -v $(LINUX_SOURCE) $(LINUX_OUTPUT)
-	@echo
-	@echo "Starting The Game"
-	@echo
-	$(PYTHON_BSD_LIN) $(LINUX_OUTPUT)/main.py
+	pip install -r requirements.txt
+	$(PYINSTALLER) $(LINUX_OPTIONS) $(LINUX_SOURCE) --distpath $(LINUX_OUTPUT)
+	$(LINUX_OUTPUT)/main.exe
+
 
 netbsd:
 	@echo "Building for NetBSD..."

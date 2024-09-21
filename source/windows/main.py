@@ -1,7 +1,7 @@
 import random
 
 
-def flip():
+def flip(print, input, rnd=True):
     turns = 50
     score_target = int(turns / 2 - 1)
     score = 0
@@ -69,4 +69,4 @@ def flip():
 
 
 if __name__ == "__main__":
-    flip()
+    flip(print, input)
