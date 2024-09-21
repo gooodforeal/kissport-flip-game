@@ -1,70 +1,151 @@
 import random
 
 
-def flip(print, input, rnd=True):
-    turns = 50
-    score_target = int(turns / 2 - 1)
-    score = 0
-    correct = 0
-    probabilities = [0.5] * 16
-    responses = [0] * 4
-    memory_factor = 0.8
-    randomness_factor = 0.3
+def flip(print, input, use_random=True):
+    B1 = 50  # Total number of turns
+    P = [0.5] * 16  # Probabilities for each of the 16 possible response patterns
+    X = [0] * 4  # History of last 4 responses (0 for 'N', 1 for 'Y')
+    F1 = 0.8  # Old-memory factor
+    F2 = 0.3  # Randomness factor
+    S1 = 0  # Number of correct guesses
+    S2 = 0  # Total number of guesses
+    A = ""  # Special character for correct guess
+
+    # Explanation
     print(" " * 25 + "FLIP")
     print(" " * 18 + "CREATIVE COMPUTING")
-    print(" " * 16 + "MORRISTOWN NEW JERSEY")
-    print("\n\n")
-    explanation = input("EXPLANATION (Y OR N)? ")
-    if explanation.upper() == "Y":
+    print(" " * 16 + "MORRISTOWN NEW JERSEY\n\n\n")
+    if input("EXPLANATION (Y OR N)?: ").upper() == "Y":
         print("ON EACH TURN, YOU GUESS YES <'Y'> OR NO <'N'>.")
         print("ONLY ONE IS CORRECT, AND THE PROGRAM HAS DECIDED")
         print("WHICH ONE, BEFORE YOU MAKE YOUR GUESS. AT FIRST")
         print("YOUR ODDS ARE 50%, PURE CHANCE. BUT LATER THE")
         print("PROGRAM WILL TRY TO TAKE ADVANTAGE OF PATTERNS")
         print("IN YOUR GUESSING.")
-        print("\n")
-        print(f"GAME ENDS AFTER {turns} TURNS; A SCORE OF {score_target} OR MORE")
-        print("IS GOOD. PROGRAM TELLS WHEN YOU WIN A TURN,")
+        print("\nGAME ENDS AFTER", B1, "TURNS; A SCORE OF", int(B1 / 2 - 1), "OR MORE")
+        print("IS GOOD. PROGRAM TELLS WHEN YOU WIN A TURN,",)
         print("BY TYPING AN ASTERISK ('*') AS THE FIRST")
         print("CHARACTER OF THE FOLLOWING LINE.")
+        print("\n\n")
+
+    # Game loop
     print("BEGIN.")
-    for i in range(4):
-        if random.random() < 0.5:
-            responses[i] = 1
     print(" ")
-    while turns > 0:
-        probability_index = 8 * responses[3] + 4 * responses[2] + 2 * responses[1] + responses[0] + 1
-        estimated_probability = probabilities[probability_index - 1]
-        adjusted_probability = estimated_probability
-        if adjusted_probability != 0.5:
-            adjusted_probability = (adjusted_probability * randomness_factor) + (
-                0 if adjusted_probability < 0.5 else 1) * (1 - randomness_factor)
-        program_answer = 1 if random.random() < adjusted_probability else 0
-        guess = input("? ")
-        while guess.upper() not in ("Y", "N"):
-            print("ERROR, MUST BE  Y  OR  N  .")
-            guess = input(" ")
-        if guess.upper() == "Y":
-            player_answer = 1
-        else:
-            player_answer = 0
-        if player_answer == program_answer:
-            correct += 1
-            print("*")
-        else:
-            print(" ")
-        responses[0] = responses[2]
-        responses[1] = responses[3]
-        responses[2] = player_answer
-        responses[3] = program_answer
-        probabilities[probability_index - 1] = memory_factor * probabilities[probability_index - 1] + (
-                    1 - memory_factor) * player_answer
-        turns -= 1
-        score += 1
-    print(f"\nEND OF GAME.\nYOU GOT {correct} OUT OF {score} CORRECT.\n\n")
-    play_again = input("PLAY AGAIN (Y OR N)? ")
-    if play_again.upper() == "Y":
-        flip(print, input)
+    if use_random:
+        for i in range(4):
+            if random.random() < 0.5:
+                X[i] = 1
+            else:
+                X[i] = 0
+        while S2 < B1:
+            # Calculate estimated probability of guessing 'Y'
+            I9 = 8 * X[3] + 4 * X[2] + 2 * X[1] + X[0] + 1
+            Z1 = P[I9 - 1]  # Adjust index to match Python indexing
+
+            # Adjust probability based on randomness factor
+            Z2 = Z1
+            if Z2 != 0.5:
+                if Z2 > 0.5:
+                    Z2 = Z2 * F2 + 1 * (1 - F2)
+                else:
+                    Z2 = Z2 * F2 + 0 * (1 - F2)
+            else:
+                Z2 = random.random()
+
+            # Determine the program's response (Z5)
+            Z5 = 0
+            if random.random() < Z2:
+                Z5 = 1
+
+            # Get player's input (Z3)
+            print(A)
+            H = input("? ").upper()
+            if H == "Y":
+                Z3 = 1
+            elif H == "N":
+                Z3 = 0
+            else:
+                print("ERROR, MUST BE  Y  OR  N  .")
+                continue
+
+            # Update scores and flag for correct guess
+            S2 += 1
+            if Z3 == Z5:
+                A = "*"
+                S1 += 1
+            else:
+                A = " "
+
+            # Update response history (X)
+            X[0] = X[1]
+            X[1] = X[2]
+            X[2] = X[3]
+            X[3] = Z3
+
+            # Update probability based on previous response patterns
+            P[I9 - 1] = F1 * P[I9 - 1] + (1 - F1) * Z3
+    else:
+        random_var = 0.49
+        for i in range(4):
+            if random_var < 0.5:
+                X[i] = 0
+            else:
+                X[i] = 1
+        while S2 < B1:
+            # Calculate estimated probability of guessing 'Y'
+            I9 = 8 * X[3] + 4 * X[2] + 2 * X[1] + X[0] + 1
+            Z1 = P[I9 - 1]  # Adjust index to match Python indexing
+
+            # Adjust probability based on randomness factor
+            Z2 = Z1
+            if Z2 != 0.5:
+                if Z2 > 0.5:
+                    Z2 = Z2 * F2 + 1 * (1 - F2)
+                else:
+                    Z2 = Z2 * F2 + 0 * (1 - F2)
+            else:
+                Z2 = random_var
+
+            # Determine the program's response (Z5)
+            Z5 = 0
+            if not random_var < Z2:
+                Z5 = 1
+
+            # Get player's input (Z3)
+            print(A)
+            H = input("? ").upper()
+            if H == "Y":
+                Z3 = 1
+            elif H == "N":
+                Z3 = 0
+            else:
+                print("ERROR, MUST BE  Y  OR  N  .")
+                A = ""
+                continue
+
+            # Update scores and flag for correct guess
+            S2 += 1
+            if Z3 == Z5:
+                A = "*"
+                S1 += 1
+            else:
+                A = " "
+
+            # Update response history (X)
+            X[0] = X[1]
+            X[1] = X[2]
+            X[2] = X[3]
+            X[3] = Z3
+
+            # Update probability based on previous response patterns
+            P[I9 - 1] = F1 * P[I9 - 1] + (1 - F1) * Z3
+
+    # End of game
+    print(A)
+    print("\nEND OF GAME.\nYOU GOT", S1, "OUT OF", S2, "CORRECT.")
+    print("\n\nPLAY AGAIN (Y OR N)?: ")
+    if input().upper() == "Y":
+        flip(print, input)  # Recursive call to start a new game
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@
 >>> ### Сборка
 >>> Сборка для Windows осуществляется с помощью команды
 >>> `make windows`
->>> ![](videos/wnd.gif)
+>>> ![](videos/wndgif.gif)
 >> ## Linux
 >>>  Требования
 >>> - Make
@@ -30,7 +30,7 @@
 >>> ### Сборка
 >>> Сборка для Web осуществляется с помощью команды
 >>> `make web`
->>> ![](videos/web.gif)
+>>> ![](videos/webgif.gif)
 >>> ## NetBSD
 >>>  Требования
 >>> - Make
@@ -38,5 +38,5 @@
 >>> ### Сборка
 >>> Сборка для NetBSD осуществляется с помощью команды
 >>> `make netBSD`
->>> ![](videos/netbsd.gif)
+>>> ![](videos/netbsdgif.gif)
 >>> ## Тестирование
