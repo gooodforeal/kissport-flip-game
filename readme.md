@@ -21,7 +21,7 @@
 >>> ### Сборка
 >>> Сборка для Linux осуществляется с помощью команды
 >>> `make linux`
->>> ![](videos/linux.gif)
+>>> ![](videos/lingif.gif)
 >> ## Web
 >>>  Требования
 >>> - Python3.9+
