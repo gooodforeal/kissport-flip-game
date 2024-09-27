@@ -33,13 +33,18 @@ web:
 	python output/web/app.py
 
 linux:
-	@echo
 	@echo "Building for Linux..."
 	@echo
-	apt install -y python3 1>/dev/null
-	pip install -r requirements.txt
-	$(PYINSTALLER) $(LINUX_OPTIONS) $(LINUX_SOURCE) --distpath $(LINUX_OUTPUT)
-	$(LINUX_OUTPUT)/main.exe
+	@echo "Installing python, pip, PyInstaller...\n"
+	@apt install -y python3 python3-pip make
+	@pip install --break-system-packages -r requirements.txt
+	@echo "Done\n"
+	@echo "Building Binary file..."
+	@$(PYINSTALLER) $(LINUX_OPTIONS) $(LINUX_SOURCE) --distpath $(LINUX_OUTPUT)
+	@echo "Done\n"
+	@echo
+	@echo "Built file located in $(LINUX_OUTPUT)"
+	@echo
 
 
 netbsd:
