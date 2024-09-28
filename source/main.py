@@ -22,7 +22,7 @@ def flip(print, input, use_random=True):
         print("YOUR ODDS ARE 50%, PURE CHANCE. BUT LATER THE")
         print("PROGRAM WILL TRY TO TAKE ADVANTAGE OF PATTERNS")
         print("IN YOUR GUESSING.")
-        print("\nGAME ENDS AFTER", B1, "TURNS; A SCORE OF", int(B1 / 2 - 1), "OR MORE")
+        print(f"\nGAME ENDS AFTER {B1} TURNS; A SCORE OF {int(B1 / 2 - 1)} OR MORE")
         print("IS GOOD. PROGRAM TELLS WHEN YOU WIN A TURN,",)
         print("BY TYPING AN ASTERISK ('*') AS THE FIRST")
         print("CHARACTER OF THE FOLLOWING LINE.")
@@ -30,7 +30,7 @@ def flip(print, input, use_random=True):
 
     # Game loop
     print("BEGIN.")
-    print(" ")
+    print(" ", end="")
     if use_random:
         for i in range(4):
             if random.random() < 0.5:
@@ -58,7 +58,7 @@ def flip(print, input, use_random=True):
                 Z5 = 1
 
             # Get player's input (Z3)
-            print(A)
+            print(A, end="")
             H = input("? ").upper()
             if H == "Y":
                 Z3 = 1
@@ -112,7 +112,7 @@ def flip(print, input, use_random=True):
                 Z5 = 1
 
             # Get player's input (Z3)
-            print(A)
+            print(A, end="")
             H = input("? ").upper()
             if H == "Y":
                 Z3 = 1
@@ -120,6 +120,7 @@ def flip(print, input, use_random=True):
                 Z3 = 0
             else:
                 print("ERROR, MUST BE  Y  OR  N  .")
+                print(end="")
                 A = ""
                 continue
 
@@ -141,9 +142,9 @@ def flip(print, input, use_random=True):
             P[I9 - 1] = F1 * P[I9 - 1] + (1 - F1) * Z3
 
     # End of game
-    print(A)
+    print(A, end="")
     print("\nEND OF GAME.\nYOU GOT", S1, "OUT OF", S2, "CORRECT.")
-    print("\n\nPLAY AGAIN (Y OR N)?: ")
+    print("\n\nPLAY AGAIN (Y OR N)?: ", end="")
     if input().upper() == "Y":
         flip(print, input)  # Recursive call to start a new game
 

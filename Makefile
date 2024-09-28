@@ -2,9 +2,9 @@ PYTHON=python3
 PYTHON_BSD_LIN=python3.12
 PYINSTALLER=pyinstaller
 FILE_NAME=main.py
-WINDOWS_SOURCE=.\source\windows\main.py
-LINUX_SOURCE=`pwd`/source/linux/main.py
-BSD_SOURCE=./source/netbsd/main.py
+WINDOWS_SOURCE=.\source\main.py
+LINUX_SOURCE=`pwd`/source/main.py
+BSD_SOURCE=./source/main.py
 WINDOWS_OUTPUT=.\output\windows
 LINUX_OUTPUT=`pwd`/output/linux
 BSD_OUTPUT=`pwd`/output/netbsd
@@ -25,12 +25,7 @@ windows:
 web:
 	@echo "Building for web..."
 	pip install flask
-	mkdir output\web\templates
-	copy source\web\main.py output\web
-	copy source\web\app.py output\web
-	copy source\web\templates\flip.html output\web\templates
-	copy source\web\templates\index.html output\web\templates
-	python output/web/app.py
+	python source/web/app.py
 
 linux:
 	@echo "Building for Linux..."

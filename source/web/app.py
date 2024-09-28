@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-import main
+import main_noend
 from multiprocessing import Process
 from time import sleep
 import os
@@ -18,7 +18,7 @@ def play():
         D2 = request.form.get('direction')
         if D2 is not None:
             write_f('input.txt', D2)
-            sleep(2)
+            sleep(3)
 
     text = read_f('print.txt')
     return render_template('flip.html', text=text)
@@ -29,7 +29,7 @@ def background_worker():
     def input_m(m):
         write_f('print.txt', m + '\n')
         while True:
-            sleep(2)
+            sleep(3)
             if os.path.exists('input.txt'):
                 inp = read_f('input.txt')
                 os.remove('input.txt')
@@ -41,7 +41,7 @@ def background_worker():
     if os.path.exists('print.txt'):
         os.remove('print.txt')
 
-    main.flip(lambda msg: write_f('print.txt', msg + '\n'), input_m)
+    main_noend.flip(lambda msg: write_f('print.txt', msg + '\n'), input_m)
 
 
 def read_f(file):
@@ -57,5 +57,4 @@ def write_f(file, txt):
 if __name__ == '__main__':
     process = Process(target=background_worker)
     process.start()
-
     app.run(debug=True)
