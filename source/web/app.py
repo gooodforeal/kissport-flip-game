@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
-import main_noend
+import sys
 from multiprocessing import Process
 from time import sleep
 import os
+
+sys.path.append("..")
+import main
 
 app = Flask(__name__)
 
@@ -40,8 +43,9 @@ def background_worker():
         os.remove('input.txt')
     if os.path.exists('print.txt'):
         os.remove('print.txt')
-
-    main_noend.flip(lambda msg: write_f('print.txt', msg + '\n'), input_m)
+    def custom_print(msg, end=''):
+        write_f('print.txt', msg + '\n')
+    main.flip(custom_print, input_m)
 
 
 def read_f(file):
