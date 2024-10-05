@@ -1,7 +1,9 @@
 import random
 
 
-def flip(print, input, use_random=True):
+def flip(print, input, use_random=True, end=''):
+    def print_end(*args, **kwargs):
+        print(*args, **kwargs, end=end)
     B1 = 50  # Total number of turns
     P = [0.5] * 16  # Probabilities for each of the 16 possible response patterns
     X = [0] * 4  # History of last 4 responses (0 for 'N', 1 for 'Y')
@@ -30,7 +32,7 @@ def flip(print, input, use_random=True):
 
     # Game loop
     print("BEGIN.")
-    print(" ", end="")
+    print_end(" ")
     if use_random:
         for i in range(4):
             if random.random() < 0.5:
@@ -58,7 +60,7 @@ def flip(print, input, use_random=True):
                 Z5 = 1
 
             # Get player's input (Z3)
-            print(A, end="")
+            print_end(A)
             H = input("? ").upper()
             if H == "Y":
                 Z3 = 1
@@ -112,7 +114,7 @@ def flip(print, input, use_random=True):
                 Z5 = 1
 
             # Get player's input (Z3)
-            print(A, end="")
+            print_end(A)
             H = input("? ").upper()
             if H == "Y":
                 Z3 = 1
@@ -120,7 +122,7 @@ def flip(print, input, use_random=True):
                 Z3 = 0
             else:
                 print("ERROR, MUST BE  Y  OR  N  .")
-                print(end="")
+                print_end()
                 A = ""
                 continue
 
@@ -142,9 +144,9 @@ def flip(print, input, use_random=True):
             P[I9 - 1] = F1 * P[I9 - 1] + (1 - F1) * Z3
 
     # End of game
-    print(A, end="")
+    print_end(A)
     print("\nEND OF GAME.\nYOU GOT", S1, "OUT OF", S2, "CORRECT.")
-    print("\n\nPLAY AGAIN (Y OR N)?: ", end="")
+    print_end("\n\nPLAY AGAIN (Y OR N)?: ")
     if input().upper() == "Y":
         flip(print, input)  # Recursive call to start a new game
 
